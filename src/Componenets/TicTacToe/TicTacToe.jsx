@@ -11,8 +11,8 @@ const TicTacToe = () => {
     let titleRef = useRef(null);
 
     const toggle = (e, num) => {
-        if (lock) {
-            return 0;
+        if (lock || data[num] !== "") {
+            return;
         }
         if (count % 2 === 0) {
             e.target.innerHTML = `<img src = '${cross_icon}'>`;
@@ -45,6 +45,8 @@ const TicTacToe = () => {
             won(data[2]);
         } else if (data[2] === data[4] && data[4] === data[6] && data[6] !=="") {
             won(data[6]);
+        } else if (count === 9) { // If no winner and all boxes are filled
+            draw();
         }
     }
 
@@ -58,12 +60,18 @@ const TicTacToe = () => {
         }
     }
 
+    const draw = () => {
+        setLock(true);
+        titleRef.current.innerHTML = "Better luck next time!";
+    };
+
     const resetGame = () => {
         data = ["", "", "", "", "", "", "", "", ""];
         setCount(0);
         setLock(false);
         const boxes = document.querySelectorAll('.boxes');
         boxes.forEach(box => box.innerHTML = "");
+        titleRef.current.innerHTML = " Tic Tac Toe Game In <span>React<span>";
     }
 
     return (
